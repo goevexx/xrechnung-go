@@ -1,0 +1,4 @@
+github.com/alexrsagen/go-libxml v0.0.0-20180725172132-02f0062ac02a h1:zJH0NVFFdo7uM1MeuF/8yyMFxIW+70cSBzLGlPt5H48=
+github.com/alexrsagen/go-libxml v0.0.0-20180725172132-02f0062ac02a/go.mod h1:MWzP0zpe1bOhvl84IrvcnbYdOnKRYtZOs8SXg1nd9dc=
+github.com/jbowtie/gokogiri v0.0.0-20190301021639-37f655d3078f h1:6UIvzqlGM38lOpKP380Wbl0kUyyjutcc7KJUaDM/U4o=
+github.com/jbowtie/gokogiri v0.0.0-20190301021639-37f655d3078f/go.mod h1:C3R3VzPq+DAwilxue7DiV6F2QL1rrQX0L56GyI+sBxM=

@@ -1,9 +1,9 @@
-//Package xrechnung - Library for processing electronic invoices - german xrechnung **/
+// Package xrechnung - Library for processing electronic invoices - german xrechnung **/
 package xrechnung
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"reflect"
 	"testing"
@@ -17,12 +17,12 @@ func TestXMLToStructure(t *testing.T) {
 	//xmlFile, err := os.Open("UBL-Invoice-2.0-Example.xml")
 	//xmlFile, err := os.Open("01.01a-INVOICE_ubl.xml") //
 	xmlFile, err := os.Open("UBL-Invoice-2.1-Example.xml")
-	defer xmlFile.Close()
-	myFileData, _ = ioutil.ReadAll(xmlFile)
 	if err != nil {
 		fmt.Print(err)
 		return
 	}
+	defer xmlFile.Close()
+	myFileData, _ = io.ReadAll(xmlFile)
 	myXMLData = string(myFileData)
 
 	type args struct {

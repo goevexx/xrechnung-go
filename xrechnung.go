@@ -1,11 +1,12 @@
-//Package xrechnung - Library for processing electronic invoices - german xrechnung 2.0 **/
+// Package xrechnung - Library for processing electronic invoices - german xrechnung 2.0 **/
 package xrechnung
 
 import (
 	"encoding/json"
 	"encoding/xml"
-	"errors"
 	"fmt"
+
+	"github.com/alexrsagen/go-libxml"
 )
 
 const (
@@ -23,12 +24,12 @@ type InvoiceDataElement struct {
 	Error       error
 }
 
-//XMLConvertStructure Converts the XML string data into structural data and checks fields
+// XMLConvertStructure Converts the XML string data into structural data and checks fields
 func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err error) {
 	// check whether CheckAndConvert has already run
 	for _, e := range me.task {
 		if e == CheckAndConvert {
-			err = errors.New("CheckAndConvert already run")
+			err = fmt.Errorf("CheckAndConvert already run")
 			return
 		}
 	}
@@ -44,7 +45,7 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 		Anmerkung: Es ist kein „identification scheme“ zu verwenden.`,
 	}
 	if lElement.Value == "" {
-		lElement.Error = errors.New(fmt.Sprintf("Error field '%s' no value", lElement.Name))
+		lElement.Error = fmt.Errorf(fmt.Sprintf("Error field '%s' no value", lElement.Name))
 	}
 	HeadFields = append(HeadFields, lElement)
 
@@ -58,7 +59,7 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 		Description: `Das Datum, an dem die Rechnung ausgestellt wurde.`,
 	}
 	if lElement.Value == "" {
-		lElement.Error = errors.New(fmt.Sprintf("Error field '%s' no value", lElement.Name))
+		lElement.Error = fmt.Errorf(fmt.Sprintf("Error field '%s' no value", lElement.Name))
 	}
 	HeadFields = append(HeadFields, lElement)
 
@@ -82,7 +83,7 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 		• 877 (Final construction invoice)`,
 	}
 	if lElement.Value == "" {
-		lElement.Error = errors.New(fmt.Sprintf("Error field '%s' no value", lElement.Name))
+		lElement.Error = fmt.Errorf(fmt.Sprintf("Error field '%s' no value", lElement.Name))
 	} else {
 		for _, e := range CInvoiceCypeCode {
 			if e.ID == lElement.Value {
@@ -91,7 +92,7 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 			}
 		}
 		if lElement.Code.Text == "" {
-			lElement.Error = errors.New(fmt.Sprintf("Error field '%s' code mapping not valid", lElement.Name))
+			lElement.Error = fmt.Errorf(fmt.Sprintf("Error field '%s' code mapping not valid", lElement.Name))
 		}
 	}
 	HeadFields = append(HeadFields, lElement)
@@ -111,7 +112,7 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 		werden.`,
 	}
 	if lElement.Value == "" {
-		lElement.Error = errors.New(fmt.Sprintf("Error field '%s' no value", lElement.Name))
+		lElement.Error = fmt.Errorf(fmt.Sprintf("Error field '%s' no value", lElement.Name))
 	} else {
 		for _, e := range CCurrency {
 			if e.CurrencyID == lElement.Value {
@@ -121,7 +122,7 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 			}
 		}
 		if lElement.Code.Text == "" {
-			lElement.Error = errors.New(fmt.Sprintf("Error field '%s' code mapping not valid", lElement.Name))
+			lElement.Error = fmt.Errorf(fmt.Sprintf("Error field '%s' code mapping not valid", lElement.Name))
 		}
 	}
 	HeadFields = append(HeadFields, lElement)
@@ -149,7 +150,7 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 			}
 		}
 		if lElement.Code.Text == "" {
-			lElement.Error = errors.New(fmt.Sprintf("Error field '%s' code mapping not valid", lElement.Name))
+			lElement.Error = fmt.Errorf(fmt.Sprintf("Error field '%s' code mapping not valid", lElement.Name))
 		}
 	}
 	HeadFields = append(HeadFields, lElement)
@@ -172,27 +173,27 @@ func (me Invoice2) XMLConvertStructure() (HeadFields []InvoiceDataElement, err e
 	return
 }
 
-//XMLToStructure returns the structure of the xcalculation from XML string
+// XMLToStructure returns the structure of the xcalculation from XML string
 func XMLToStructure(xmlData string) (xInvoice Invoice2, err error) {
 	err = xml.Unmarshal([]byte(xmlData), &xInvoice)
 	return
 }
 
-//StructureToXML returns the XML of the xcalculation from the structure
+// StructureToXML returns the XML of the xcalculation from the structure
 func StructureToXML(xInvoice Invoice2) (xmlData string, err error) {
-	if myBytesData, err := xml.Marshal(xInvoice); err == nil {
+	if myBytesData, err := libxml.Marshal(xInvoice); err == nil {
 		xmlData = string(myBytesData)
 	}
 	return
 }
 
-//JsonToStructure returns the structure of the xcalculation from Json string
+// JsonToStructure returns the structure of the xcalculation from Json string
 func JsonToStructure(jsonData string) (xInvoice Invoice2, err error) {
 	err = json.Unmarshal([]byte(jsonData), &xInvoice)
 	return
 }
 
-//StructureToJson returns the Json of the xcalculation from the structure
+// StructureToJson returns the Json of the xcalculation from the structure
 func StructureToJson(xInvoice Invoice2) (jsonData string, err error) {
 	if myBytesData, err := json.Marshal(xInvoice); err == nil {
 		jsonData = string(myBytesData)
